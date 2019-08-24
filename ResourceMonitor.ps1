@@ -9,7 +9,7 @@ If ($Device -like '<YOUR PRTG SERVER HOSTNAME GOES HERE>')
 
     $CPUs = Get-CimInstance -ClassName "Win32_Processor" -ComputerName "$Device"
 
-    $Disks = Get-CimInstance -ClassName "Win32_LogicalDisk" -ComputerName "$Device" | Where-Object -Property 'DriveType' -eq 3 
+    $Disks = Get-CimInstance -ClassName "Win32_LogicalDisk" -ComputerName "$Device" | Where-Object -Property 'DriveType' -eq 3
 
 } # End if
 
@@ -24,7 +24,7 @@ Else
 
     $CPUs = Get-CimInstance -CimSession $CIMSession -ClassName  "Win32_Processor"
 
-    $Disks = Get-CimInstance -CimSession $CIMSession -ClassName  "Win32_LogicalDisk" | Where-Object -Property 'DriveType' -eq 3 
+    $Disks = Get-CimInstance -CimSession $CIMSession -ClassName  "Win32_LogicalDisk" | Where-Object -Property 'DriveType' -eq 3
 
 } # End Else
 
@@ -53,7 +53,18 @@ ForEach ($Disk in $Disks)
 
     $XmlDisks += "<Result><Channel>Free Space Drive " + $Disk.DeviceID + "</Channel><Value>" + $FreeDriveSpace + "</Value><VolumeSize>GigaByte</VolumeSize></Result>"
 
-    $XmlDisks += "<Result><Channel>Percentage Free on Drive " + $Disk.DeviceID + "</Channel><Value>" + $DrivePercentageFree + "</Value><Unit>Percent</Unit><LimitWarningMsg>WARNING: Disk Space Free is at or below 15% capacity</LimitWarningMsg><LimitErrorMsg>CRITICAL: Available Disk space is at or has fallen below 10% availability</LimitErrorMsg><LimitMinError>10.00</LimitMinError><LimitMinWarning>15.00</LimitMinWarning><LimitMode>1</LimitMode></Result>"
+    If ($Disk.DeviceID -like 'C:')
+    {
+
+        $XmlDisks += "<Result><Channel>Percentage Free on Drive " + $Disk.DeviceID + "</Channel><Value>" + $DrivePercentageFree + "</Value><Unit>Percent</Unit><LimitWarningMsg>WARNING: Disk Space Free is at or below 15% capacity</LimitWarningMsg><LimitErrorMsg>CRITICAL: Available Disk space is at or has fallen below 10% availability</LimitErrorMsg><LimitMinError>10.00</LimitMinError><LimitMinWarning>15.00</LimitMinWarning><LimitMode>1</LimitMode></Result>"
+
+    } # End If
+    Else
+    {
+
+        $XmlDisks += "<Result><Channel>Percentage Free on Drive " + $Disk.DeviceID + "</Channel><Value>" + $DrivePercentageFree + "</Value><Unit>Percent</Unit></Result>"
+
+    } # End Else
 
 } # End ForEach
 
@@ -77,7 +88,7 @@ $MemoryInUsePercentage = [math]::Round(100-(($OS.FreePhysicalMemory/$OS.TotalVis
 
 # Below this line can be added to XML to add a total disk count to output
 The fewer xml results the better the chance they dont get convoluted during data transfer to prtg which is finicky
-PRTG claims a max of 50 results but they do not gurantee their success.
+PRTG claims a max of 50 results but they do not gurantee results which is fairly clear.
 
         <Result>
             <Channel>Total Disks</Channel>
@@ -85,7 +96,7 @@ PRTG claims a max of 50 results but they do not gurantee their success.
             <Unit>Count</Unit>
         </Result>
 
-Below this line is for switching out or adding memory in Gigabytes
+Bewlow this line is for switching out or adding memory in Gigabytes
         <Result>
             <Channel>Memory Free</Channel>
             <Value>" + $MemoryFree + "</Value>
@@ -107,6 +118,9 @@ $Xml="<PRTG>
             <Channel>Total Memory</Channel>
             <Value>" + $TotalMemory + "</Value>
             <VolumeSize>GigaByte</VolumeSize>
+            <LimitErrorMsg>ERROR: Connection to $Device could not be established</LimitErrorMsg>
+            <LimitMinError>0</LimitMinError>
+            <LimitMode>1</LimitMode>
         </Result>
         <Result>
             <Channel>Memory Free Percentage</Channel>
@@ -128,10 +142,10 @@ $Xml="<PRTG>
     </PRTG>
     "
 
-    Function Write-Xml ([xml]$Xml)
+    Function Write-XmlToScreen ([xml]$Xml)
     {
         # Making XML Human Readable
-        $StringWriter = New-Object System.IO.StringWriter;
+        $StringWriter = New-Object System.IO.StringWriter;##
 
         $XmlWriter = New-Object System.Xml.XmlTextWriter $StringWriter;
 
@@ -145,6 +159,6 @@ $Xml="<PRTG>
 
         Write-Output $StringWriter.ToString();
 
-    } # End Function Write-Xml
+    } # End Function Write-XmlToScreen
 
-    Write-Xml "$Xml"
+    Write-XmlToScreen "$Xml"
