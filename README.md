@@ -2,6 +2,7 @@
 Sensors for the PRTG Network Monitoring Application
 
 ### ResourceMonitor.ps1
+This is an EXEXML Advanced Sensor for PRTG.
 I created this sensor to condense the output of RAM, Disk Usage, and CPU Load into one sensor for easy viewing and for getting the most out of the PRTG Network Monitoring Tool. The XML needs to be exact if you are going to make ay changes. PRTG  translates integers once they are received. Sometimes you need to multiply or divied by 1MB or 1GB to get the correct format. Best to use this sensor as is.
 
 There are a few fields that are commented out that can easily be added to the PRTG final sensor by just copying them from the comments inside the $XML variable between <Result> tags. I left outthe below fields.
@@ -33,7 +34,16 @@ An image of the configuration can be listed below. It is crucial that the follow
 - Parameter needs to mirror the following text exactly in order to fill in the device variable parameter: '%device' 
 - Ensure use Windows Credentials of parents device is selected and configured with the account I mentioned above.
 - If this will run on a bunch of machines it is best to create a mutext record. This allows more than one instance of the script to run. It is easier than making more files with a slightly different name.
+- Select the Log EXE option to disk. This will keep a log of the most recent result.
 
 I am pretty sure I covered everything. Hope someone benefits from this as it was time consuming.
 
 ![Image of PRTG Sensor Settings](https://raw.githubusercontent.com/tobor88/PRTG_Sensors/master/PRTG_Sensor_Image.png)
+
+### Troubleshooting
+If you experience issues the troubleshooting data can be found in this location under one of the syquentially named txt files.
+C:\ProgramData\Paessler\PRTG Network Monitor\Logs (Sensors)
+
+In order to view your script in the PRTG GUI you will need to place the .ps1 file in the following location.
+C:\Program Files (x86)\PRTG Network Monitor\Custom Sensors\EXEXML
+
