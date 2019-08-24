@@ -131,7 +131,7 @@ $Xml="<PRTG>
     Function Write-Xml ([xml]$Xml)
     {
         # Making XML Human Readable
-        $StringWriter = New-Object System.IO.StringWriter;##
+        $StringWriter = New-Object System.IO.StringWriter;
 
         $XmlWriter = New-Object System.Xml.XmlTextWriter $StringWriter;
 
@@ -145,6 +145,6 @@ $Xml="<PRTG>
 
         Write-Output $StringWriter.ToString();
 
-    } # End Function Write-XmlToScreen
+    } # End Function Write-Xml
 
     Write-Xml "$Xml"
