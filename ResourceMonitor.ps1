@@ -119,7 +119,7 @@ $Xml="<PRTG>
             <Value>" + $TotalMemory + "</Value>
             <VolumeSize>GigaByte</VolumeSize>
             <LimitErrorMsg>ERROR: Connection to $Device could not be established</LimitErrorMsg>
-            <LimitMinError>0</LimitMinError>
+            <LimitMinError>1</LimitMinError>
             <LimitMode>1</LimitMode>
         </Result>
         <Result>
