@@ -20,10 +20,10 @@ There are a few fields that are commented out that can easily be added to the PR
   - Percentage Free on Drive ?:\
 
 Warning and Error triggers are set on the following.
-- Percentage Freem on Drive ?:\  below WARN: 15% and ERROR: 10%
+- Percentage Free on Drive ?:\  below WARN: 15% and ERROR: 10%
 - Memory In Use Percentage above WARN: 85% and ERROR: 95%
-- CPU Loads above WARN: 85% and ERROR: 95% 
-
+- CPU Loads: WARN: 85% and ERROR: 95% 
+- Error for sensor shows up if Total Memory shows as 0. This is to know whether or not a connect was successfully made to the remote machine.
 An image of the output can be seen below.
 ![Image of PRTG Results in GUI](https://raw.githubusercontent.com/tobor88/PRTG_Sensors/master/PRTG_Result_Image.png)
 
