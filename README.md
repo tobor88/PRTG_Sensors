@@ -1,6 +1,8 @@
 # PRTG_Sensors
 Sensors for the PRTG Network Monitoring Application
 
+### [Blog I wrote on this sensor](https://roberthosborne.com/f/prtg-sensor-condensing-with-powershell)
+
 ### ResourceMonitor.ps1
 This is an EXEXML Advanced Sensor for PRTG.
 I created this sensor to condense the output of RAM, Disk Usage, and CPU Load into one sensor for easy viewing and for getting the most out of the PRTG Network Monitoring Tool. The XML needs to be exact if you are going to make ay changes. PRTG  translates integers once they are received. Sometimes you need to multiply or divied by 1MB or 1GB to get the correct format. Best to use this sensor as is.
