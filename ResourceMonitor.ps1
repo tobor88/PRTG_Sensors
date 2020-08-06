@@ -2,28 +2,22 @@ param (
     [string]$Device
 ) # End param
 
-If ($Device -like '<YOUR PRTG SERVER HOSTNAME GOES HERE>')
+If ($Device -like '<YOUR PRTG SERVER HOSTNAME GOES HERE NOT FQDN>')
 {
 
     $OS = Get-CimInstance -ClassName "Win32_OperatingSystem" -ComputerName "$Device"
-
     $CPUs = Get-CimInstance -ClassName "Win32_Processor" -ComputerName "$Device"
-
     $Disks = Get-CimInstance -ClassName "Win32_LogicalDisk" -ComputerName "$Device" | Where-Object -Property 'DriveType' -eq 3
 
 } # End if
-
 Else
 {
 
     $CimSessionOptions = New-CimSessionOption -UseSsl # -SkipRevocationCheck -SkipCACheck -SkipCNCheck # Uncomment these if the EXE script is failing to run as one of these options may be the issue.
-
     $CIMSession = New-CimSession -ComputerName $Device -SessionOption $CimSessionOptions
 
     $OS = Get-CimInstance -CimSession $CIMSession -ClassName "Win32_OperatingSystem"
-
     $CPUs = Get-CimInstance -CimSession $CIMSession -ClassName  "Win32_Processor"
-
     $Disks = Get-CimInstance -CimSession $CIMSession -ClassName  "Win32_LogicalDisk" | Where-Object -Property 'DriveType' -eq 3
 
 } # End Else
@@ -42,15 +36,11 @@ ForEach ($Disk in $Disks)
 {
 
     $TotalDriveSpace = ($Disk.Size)
-
     $FreeDriveSpace = ($Disk.FreeSpace)
-
     $DrivePercentageFree = [math]::Round(($Disk.FreeSpace/$Disk.Size)*100,2).ToString("###")
 
     [int]$DisksTotal += 1
-
     $XmlDisks += "<Result><Channel>Total Space Drive " + $Disk.DeviceID + "</Channel><Value>" + $TotalDriveSpace + "</Value><VolumeSize>GigaByte</VolumeSize></Result>"
-
     $XmlDisks += "<Result><Channel>Free Space Drive " + $Disk.DeviceID + "</Channel><Value>" + $FreeDriveSpace + "</Value><VolumeSize>GigaByte</VolumeSize></Result>"
 
     If ($Disk.DeviceID -like 'C:')
@@ -78,25 +68,36 @@ $MemoryFreePercentage = [math]::Round(($OS.FreePhysicalMemory/$OS.TotalVisibleMe
 
 $MemoryInUsePercentage = [math]::Round(100-(($OS.FreePhysicalMemory/$OS.TotalVisibleMemorySize)*100),2)
 
-<# The below can be added to the XML variable if Total CPUs is a wanted option.
+<# 
+===============================================================
+The below can be added to the $Xml variable if Total CPUs is a wanted option.
+---------------------------------------------------------------
         <Result>
             <Channel>Total CPUs</Channel>
             <Value>" + $CPUsTotal + "</Value>
             <Unit>Count</Unit>
         </Result>
+----------------------------------------------------------------
 
 
-# Below this line can be added to XML to add a total disk count to output
-The fewer xml results the better the chance they dont get convoluted during data transfer to prtg which is finicky
-PRTG claims a max of 50 results but they do not gurantee results which is fairly clear.
 
+=================================================================
+# Below this line can be added to $Xml to add a total disk count to output
+NOTE: The fewer XML results the better the chance they dont get convoluted during data transfer to prtg which is finicky
+PRTG claims a max of 50 results but they do not gurantee results. 
+I have not had any issues with the current set up of this sensor and I have this sensor going on around 30 devices 
+----------------------------------------------------------------
         <Result>
             <Channel>Total Disks</Channel>
             <Value>" + $DisksTotal + "</Value>
             <Unit>Count</Unit>
         </Result>
+----------------------------------------------------------------
 
-Bewlow this line is for switching out or adding memory in Gigabytes
+
+================================================================
+Below this line is for switching out or adding memory in Gigabytes
+----------------------------------------------------------------
         <Result>
             <Channel>Memory Free</Channel>
             <Value>" + $MemoryFree + "</Value>
@@ -109,8 +110,9 @@ Bewlow this line is for switching out or adding memory in Gigabytes
             <VolumeSize>GigaByte</VolumeSize>
             <Float>1</Float>
         </Result>
+----------------------------------------------------------------        
 #>
-
+# This is the $Xml variable reference in the comments above
 $Xml="<PRTG>
         $XmlCPUs
         $XmlDisks
@@ -145,16 +147,12 @@ $Xml="<PRTG>
     Function Write-XmlToScreen ([xml]$Xml)
     {
         # Making XML Human Readable
-        $StringWriter = New-Object System.IO.StringWriter;##
-
-        $XmlWriter = New-Object System.Xml.XmlTextWriter $StringWriter;
+        $StringWriter = New-Object -TypeName System.IO.StringWriter;##
+        $XmlWriter = New-Object -TypeName System.Xml.XmlTextWriter $StringWriter;
 
         $XmlWriter.Formatting = "indented";
-
         $Xml.WriteTo($XmlWriter);
-
         $XmlWriter.Flush();
-
         $StringWriter.Flush();
 
         Write-Output $StringWriter.ToString();
