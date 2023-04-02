@@ -13,7 +13,7 @@ Replace the SSL certificate on a local server hosting the PRTG service
 .PARAMETER PfxPath
 Define the file location of the PFX certificate file
 
-.PARAMETER KeyPassword
+.PARAMETER Password
 Enter the password to unlock the PFX file
 
 .PARAMETER CertPath
