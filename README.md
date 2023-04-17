@@ -1,4 +1,4 @@
-# PRTG_Sensors
+# PRTG Sensors
 
 PowerShell Sensors that use CIM for PRTG Network Monitoring
 
@@ -13,7 +13,7 @@ Update-PRTGCertificate -CertPath "C:\Temp\cert.pem" -KeyPath "C:\Temp\key.pem" -
 Update-PRTGCertificate -PfxCertificate "C:\Temp\ssl-cert.pfx" -KeyPassword (ConvertTo-SecureString -AsPlainTest -Force -String 'Str0ngK3yP@ssw0rd!')
 ```
 
-### ResourceMonitor.ps1
+### Get-ResourceInfoPRTG.ps1
 
 This is an EXEXML Advanced Sensor for PRTG.
 I created this sensor to condense the output of RAM, Disk Usage, and CPU Load into one sensor for easy viewing and for getting the most out of the PRTG Network Monitoring Tool. The XML needs to be exact if you are going to make any changes. PRTG translates integers once they are received. Sometimes you need to multiply or divied by 1MB or 1GB to get the correct format. Best to use this sensor as is.
