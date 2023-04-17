@@ -2,6 +2,17 @@
 
 PowerShell Sensors that use CIM for PRTG Network Monitoring
 
+### Update-PRTGCertificate.ps1
+
+This PowerShell cmdlet can be used to update the PRTG HTTPS certificate utilzing a PFX file or already separated Base64 formatted certificate files
+```powershell
+# The below example displays an example value for using the PFX cmdlet paramters
+Update-PRTGCertificate -CertPath "C:\Temp\cert.pem" -KeyPath "C:\Temp\key.pem" -CAPath "C:\Temp\root.pem"
+
+# The below example displyas an example value for using the certificate Path cmdlet parameters
+Update-PRTGCertificate -PfxCertificate "C:\Temp\ssl-cert.pfx" -KeyPassword (ConvertTo-SecureString -AsPlainTest -Force -String 'Str0ngK3yP@ssw0rd!')
+```
+
 ### ResourceMonitor.ps1
 
 This is an EXEXML Advanced Sensor for PRTG.
