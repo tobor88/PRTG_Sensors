@@ -39,8 +39,12 @@ Tell the cmdlet you do not wish to back up any pre-existing certificate files fo
 
 
 .EXAMPLE
-Update-SSLCertificate -CertPath C:\Temp\cert.pem -KeyPath C:\Temp\key.pem -CertDestination "C:\Program Files (x86)\PRTG Network Monitor\cert\prtg.crt" -KeyDestination "C:\Program Files (x86)\PRTG Network Monitor\cert\prtg.key" -CAPath $CAChainFile -CADestination "C:\Program Files (x86)\PRTG Network Monitor\cert\root.pem" -PfxCertificate "C:\Temp\ssl-cert.pfx" -KeyPassword (ConvertTo-SecureString -AsPlainTest -Force -String 'Str0ngK3yP@ssw0rd!') -Service "PRTGCoreService","PRTGProbeService" -ComputerName "prtg.domain.com" -UseSSL -Credential (Get-Credential)
-# This example replaces the public certiticate, private key certificate, and CA chain certificate files on a PRTG server. It restarts the two PRTG services and saves a copy of the replaced certificates as .old files
+Update-SSLCertificate -PfxCertificate "C:\Temp\ssl-cert.pfx" -KeyPassword (ConvertTo-SecureString -AsPlainTest -Force -String 'Str0ngK3yP@ssw0rd!') -OverwriteExistingCertificate
+# This example uses a PFX certificate and assigns the extracted certificates to the PRTG HTTPS site but does not back up the existing certificate files
+
+.EXAMPLE
+Update-SSLCertificate -CertPath "C:\Temp\cert.pem" -KeyPath "C:\Temp\key.pem" -CAPath "C:\Temp\root.pem" -CertDestination "C:\Program Files (x86)\PRTG Network Monitor\cert\prtg.crt" -KeyDestination "C:\Program Files (x86)\PRTG Network Monitor\cert\prtg.key" -CADestination "C:\Program Files (x86)\PRTG Network Monitor\cert\root.pem"
+# This example uses already extracted Base64 certificates and assigns them to the PRTG HTTPS site and backs up the existing certificate files
 
 
 .NOTES
