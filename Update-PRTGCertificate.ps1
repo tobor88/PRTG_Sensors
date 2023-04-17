@@ -34,6 +34,9 @@ Enter the path to the Root CA file that will get trusted on a remote computer
 .PARAMETER CADestination
 Enter the destination path to save a Root CA file on a remote computer in accordance with that services documentation
 
+.PARAMETER OverwriteExistingCertificate
+Tell the cmdlet you do not wish to back up any pre-existing certificate files for PRTG and overwrite the current ones
+
 
 .EXAMPLE
 Update-SSLCertificate -CertPath C:\Temp\cert.pem -KeyPath C:\Temp\key.pem -CertDestination "C:\Program Files (x86)\PRTG Network Monitor\cert\prtg.crt" -KeyDestination "C:\Program Files (x86)\PRTG Network Monitor\cert\prtg.key" -CAPath $CAChainFile -CADestination "C:\Program Files (x86)\PRTG Network Monitor\cert\root.pem" -PfxCertificate "C:\Temp\ssl-cert.pfx" -KeyPassword (ConvertTo-SecureString -AsPlainTest -Force -String 'Str0ngK3yP@ssw0rd!') -Service "PRTGCoreService","PRTGProbeService" -ComputerName "prtg.domain.com" -UseSSL -Credential (Get-Credential)
@@ -123,7 +126,12 @@ https://www.hackthebox.eu/profile/52286
             Mandatory=$False,
             HelpMessage="[H] Set the aboslute path to save your certificates Key file on the remote machine running a service with HTTPS`n[E] EXAMPLE: C:\ProgramData\Tenable\Nessus\nessus\CA\serverkey.pem"
         )]  # End Parameter
-        [String]$CADestination = "C:\Program Files (x86)\PRTG Network Monitor\cert\root.pem"
+        [String]$CADestination = "C:\Program Files (x86)\PRTG Network Monitor\cert\root.pem",
+        
+        [Parameter(
+            Mandatory=$False
+        )]  # End Parameter
+        [Switch][Bool]$OverwriteExistingCertificate
     )  # End param
 
     $IdentityCheck = New-Object -TypeName System.Security.Principal.WindowsPrincipal([System.Security.Principal.WindowsIdentity]::GetCurrent())
@@ -144,11 +152,14 @@ https://www.hackthebox.eu/profile/52286
     $PFXCertificate = Get-PfxCertificate -FilePath $PfxPath.FullName -Password $Password
 
 
-    Write-Verbose -Message "[v] Backing up the existing PRTG certificate files"
-    Move-Item -Path $KeyDestination -Destination "$($KeyDestination)_$(Get-Date -Format 'yyyy-MM-dd_hh-mm-ss').old" -Force -Confirm:$False -ErrorAction Inquire
-    Move-Item -Path $CertDestination -Destination "$($CertDestination)_$(Get-Date -Format 'yyyy-MM-dd_hh-mm-ss').old" -Force -Confirm:$False -ErrorAction Inquire
-    Move-Item -Path $CADestination -Destination "$($CADestination)_$(Get-Date -Format 'yyyy-MM-dd_hh-mm-ss').old" -Force -Confirm:$False -ErrorAction Inquire
+    If (!($OverwriteExistingCertificate.IsPresent)) {
 
+        Write-Verbose -Message "[v] Backing up the existing PRTG certificate files"
+        Move-Item -Path $KeyDestination -Destination "$($KeyDestination)_$(Get-Date -Format 'yyyy-MM-dd_hh-mm-ss').old" -Force -Confirm:$False -ErrorAction Inquire
+        Move-Item -Path $CertDestination -Destination "$($CertDestination)_$(Get-Date -Format 'yyyy-MM-dd_hh-mm-ss').old" -Force -Confirm:$False -ErrorAction Inquire
+        Move-Item -Path $CADestination -Destination "$($CADestination)_$(Get-Date -Format 'yyyy-MM-dd_hh-mm-ss').old" -Force -Confirm:$False -ErrorAction Inquire
+    
+    }  # End If
 
     If ($PSCmdlet.ParameterSetName -eq "PFX") {
 
