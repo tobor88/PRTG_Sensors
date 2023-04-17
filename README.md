@@ -16,7 +16,7 @@ Update-PRTGCertificate -PfxCertificate "C:\Temp\ssl-cert.pfx" -KeyPassword (Conv
 ### ResourceMonitor.ps1
 
 This is an EXEXML Advanced Sensor for PRTG.
-I created this sensor to condense the output of RAM, Disk Usage, and CPU Load into one sensor for easy viewing and for getting the most out of the PRTG Network Monitoring Tool. The XML needs to be exact if you are going to make ay changes. PRTG translates integers once they are received. Sometimes you need to multiply or divied by 1MB or 1GB to get the correct format. Best to use this sensor as is.
+I created this sensor to condense the output of RAM, Disk Usage, and CPU Load into one sensor for easy viewing and for getting the most out of the PRTG Network Monitoring Tool. The XML needs to be exact if you are going to make any changes. PRTG translates integers once they are received. Sometimes you need to multiply or divied by 1MB or 1GB to get the correct format. Best to use this sensor as is.
 
 The below values are extras that can be added to your monitoring. It is not suggested to select every available option with -ResourceMonitors. The reason for this is that PRTG states the fewer XML results returned, the better the chance they do not get convoluted during data transfer back to PRTG. PRTG claims a max of 50 results but they do not gurantee them. This means for example that your disk total returned information can get placed in your memory free percentage column in the PRTG application. If you wish to attempt using all of the monitors available in this cmdlet I suggest using the -IgnoreWarningMessage switch parameter with it.
   - TotalDisks
