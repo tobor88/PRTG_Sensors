@@ -47,7 +47,7 @@ An image of the configuration can be listed below. It is crucial that the follow
 - Configure the parent level of the devices you are adding this sensor to. We want them to use Windows Authentication with an account that can access LDAP and issue remote commands with WinRM. 
 - Parameter needs to mirror the following text exactly in order to fill in the device variable parameter: '%device'. In the image I am using '%device' which is a PRTG placeholder value for the device name. You can specify other options as you would specifying powersehll argumets such as in the example below.
 ```powershell
-'%device' -ResourceMonitors @("CPULoad", "CPUCount", "DiskFreePercentage", "DiskFreeGigabytes", "TotalDisks", "MemoryFreePercentage", "MemoryFreeGigaByte") -IgnoreWarningMessage -UseSSL
+-ComputerName '%device' -ResourceMonitors "CPULoad", "CPUCount", "DiskFreePercentage", "DiskFreeGigabytes", "TotalDisks", "MemoryFreePercentage", "MemoryFreeGigaByte" -LowDiskSpaceWarningThreshold 20 -LowDiskSpaceCriticalThreshold -CpuUsageWarningThreshold 85 -CpuUsageCriticalThreshold 95 -MemoryWarningThreshold 85 -MemoryCriticalThreshold 95 -IgnoreWarningMessage -UseSSL
 ```
 - Ensure use Windows Credentials of parents device is selected and configured with the account I mentioned above.
 - If this will run on a bunch of machines it is best to create a mutext record. This allows more than one instance of the script to run. It is easier than making more files with a slightly different name.
