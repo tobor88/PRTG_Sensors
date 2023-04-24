@@ -13,6 +13,9 @@ Update-PRTGCertificate -CertPath "C:\Temp\cert.pem" -KeyPath "C:\Temp\key.pem" -
 Update-PRTGCertificate -PfxCertificate "C:\Temp\ssl-cert.pfx" -KeyPassword (ConvertTo-SecureString -AsPlainTest -Force -String 'Str0ngK3yP@ssw0rd!')
 ```
 
+#### Update-PRTGCertificate Sample Output
+![Image of PRTG Results in GUI 2023](https://raw.githubusercontent.com/tobor88/PRTG_Sensors/master/Update-PRTG-Cert-Output.png)
+
 ### Get-ResourceInfoPRTG.ps1
 
 This is an EXEXML Advanced Sensor for PRTG.
