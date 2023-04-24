@@ -182,7 +182,7 @@ https://www.hackthebox.eu/profile/52286
 
 
         Write-Verbose -Message "[v] Extracting private key from the PFX file"
-        Convert-PfxToPem -InputFile $PfxPath.FullName -Outputfile $KeyDestination -Password $Password
+        Convert-PfxToPem -InputFile $PfxPath.FullName -Outputfile $KeyDestination #-Password $Password It seems this parameter was removed from the PSPKI module for some reason
         $FileContents = Get-Content -Path $KeyDestination -Raw
         $FileContents -Match "(?ms)(\s*((?<privatekey>-----BEGIN PRIVATE KEY-----.*?-----END PRIVATE KEY-----)|(?<certificate>-----BEGIN CERTIFICATE-----.*?-----END CERTIFICATE-----))\s*){2}"
         $Matches["privatekey"] | Out-File -FilePath $KeyDestination -Force
