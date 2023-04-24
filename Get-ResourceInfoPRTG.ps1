@@ -107,11 +107,14 @@ param (
         HelpMessage="[H] Enter the name of the device you are reaching out too `n[E] EXAMPLE: servername.domainname.com "
     )]  # End Parameter
     [Alias("Device","Server")] # <---- The value 'Device' is required for PRTG to pass variable to cmdlet. Using -ComputerName is considered a best practice
-    [ValidateScript({$_ -notmatch ' '}, ErrorMessage = '[x] Device name can not contain spaces')]
     [String]$ComputerName,
 
-    [Parameter()]  # End Parameter
-    [ValidateSet("CPULoad", "CPUCount", "DiskFreePercentage", "DiskFreeGigabytes", "TotalDisks", "MemoryFreePercentage", "MemoryFreeGigaByte")]
+    [Parameter(
+        Mandatory=$False,
+        ValueFromPipeline=$False,
+        ValueFromPipeLineByPropertyName=$False
+    )]  # End Parameter
+    # OPTIONS: "CPULoad", "CPUCount", "DiskFreePercentage", "DiskFreeGigabytes", "TotalDisks", "MemoryFreePercentage", "MemoryFreeGigaByte"
     [String[]]$ResourceMonitors = @("CPULoad", "CPUCount", "DiskFreePercentage", "DiskFreeGigabytes", "TotalDisks", "MemoryFreePercentage", "MemoryFreeGigaByte"),
 
     [Parameter(
@@ -200,40 +203,9 @@ BEGIN {
 
     }  # End If
 
-    Write-Verbose -Message "[v] Importing required custom functions"
-    Function Write-XmlToScreen {
-        [OutputType([System.String])]
-        [CmdletBinding()]
-        param(
-            [Parameter(
-                Position=0,
-                Mandatory=$True,
-                ValueFromPipeline=$False,
-                ValueFromPipeLineByPropertyName=$False,
-                HelpMessage="[H] Enter your XML formatted contents "
-            )]  # End Parameter
-            [Xml]$Xml
-        )  # End param
-
-    BEGIN {
-
-        $StringWriter = New-Object -TypeName System.IO.StringWriter
-        $XmlWriter = New-Object -TypeName System.Xml.XmlTextWriter -ArgumentList $StringWriter
-
-    } PROCESS {
-
-        $XmlWriter.Formatting = "indented"
-        $Xml.WriteTo($XmlWriter)
-        $XmlWriter.Flush()
-        $StringWriter.Flush()
-
-    } END {
-
-        Return $StringWriter.ToString()
-
-    }  # End BPE
-
-    } # End Function Write-XmlToScreen
+    $StringWriter = New-Object -TypeName System.IO.StringWriter
+    $XmlWriter = New-Object -TypeName System.Xml.XmlTextWriter -ArgumentList $StringWriter
+    $XmlWriter.Formatting = "indented"
 
 } PROCESS {
 
@@ -462,6 +434,9 @@ BEGIN {
 
 } END {
 
-    Write-XmlToScreen -Xml "$Xml"
+    [Xml]$Xml.WriteTo($XmlWriter)
+    $XmlWriter.Flush()
+    $StringWriter.Flush()
+    Return $StringWriter.ToString()
 
 }  # End BPE
