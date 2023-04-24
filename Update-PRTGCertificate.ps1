@@ -146,12 +146,12 @@ https://www.hackthebox.eu/profile/52286
     }  # End If
 
     $Modules = "PSPKI"
-    If (!(Get-Module -ListAvailable -Name $Modules)) {
+    If (!(Get-Module -ListAvailable -Name $Modules -Verbose:$False)) {
 
-        Install-Module -Name $Modules
+        Install-Module -Name $Modules -Verbose:$False
 
     }  # End If
-    Import-Module -Name $Modules -Force
+    Import-Module -Name $Modules -Force -Verbose:$False
     $PRTGServices = @("PRTGCoreService","PRTGProbeService")
     $PFXCertificate = Get-PfxCertificate -FilePath $PfxPath.FullName -Password $Password
 
@@ -169,7 +169,7 @@ https://www.hackthebox.eu/profile/52286
 
         Write-Verbose -Message "[v] Extrating the Public Certificate from the PFX file $($PfxPath.Name) to $($CertDestination)"
         Export-Certificate -Cert $PFXCertificate -FilePath $CertDestination.Replace(".crt", ".cer") -Type CERT -Force | Out-Null
-        Start-Process -FilePath "C:\Windows\System32\certutil.exe" -ArgumentList @("-f", "-encode", $CertDestination.Replace(".crt", ".cer"), $CertDestination) -Wait -WorkingDirectory "C:\Windows\System32" -NoNewWindow -Confirm:$False
+        Start-Process -FilePath "C:\Windows\System32\certutil.exe" -ArgumentList @("-f", "-encode", $CertDestination.Replace(".crt", ".cer"), $CertDestination) -Wait -WorkingDirectory "C:\Windows\System32" -NoNewWindow
         Remove-Item -Path $CertDestination.Replace(".crt", ".cer") -Force -Confirm:$False -Verbose:$False -ErrorAction SilentlyContinue -WarningAction SilentlyContinue
 
 
@@ -180,7 +180,7 @@ https://www.hackthebox.eu/profile/52286
         $Chain.ChainElements | ForEach-Object {
 
             Export-Certificate -FilePath $CADestination -Cert $_.Certificate -Type CERT -Force | Out-Null
-            Start-Process -FilePath "C:\Windows\System32\certutil.exe" -ArgumentList @("-f", "-encode", $CADestination.Replace(".crt", ".cer"), $CADestination) -Wait -WorkingDirectory "C:\Windows\System32" -NoNewWindow -Confirm:$False
+            Start-Process -FilePath "C:\Windows\System32\certutil.exe" -ArgumentList @("-f", "-encode", $CADestination.Replace(".crt", ".cer"), $CADestination) -Wait -WorkingDirectory "C:\Windows\System32" -NoNewWindow
             $AllCACerts += Get-Content -Path $CADestination -Force
 
         }  # End ForEach-Object
