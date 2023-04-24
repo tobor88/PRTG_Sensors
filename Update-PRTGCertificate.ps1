@@ -1,5 +1,6 @@
 #Requires -Version 3.0
 #Requires -Module PSPKI
+#Requires -RunAsAdministrator
 Function Update-PRTGCertifiate {
 <#
 .SYNOPSIS
@@ -138,13 +139,6 @@ https://www.hackthebox.eu/profile/52286
         [Switch][Bool]$OverwriteExistingCertificate
     )  # End param
 
-    $IdentityCheck = New-Object -TypeName System.Security.Principal.WindowsPrincipal([System.Security.Principal.WindowsIdentity]::GetCurrent())
-    If (!($IdentityCheck.IsInRole([System.Security.Principal.WindowsBuiltInRole]::Administrator))) {
-
-        Throw "[x] You are required to run this script using elevated admin privileges"
-
-    }  # End If
-
     $Modules = "PSPKI"
     If (!(Get-Module -ListAvailable -Name $Modules -Verbose:$False)) {
 
@@ -152,7 +146,7 @@ https://www.hackthebox.eu/profile/52286
 
     }  # End If
     Import-Module -Name $Modules -Force -Verbose:$False
-    $PRTGServices = @("PRTGCoreService","PRTGProbeService")
+    $PRTGService = "PRTGProbeService"
     $PFXCertificate = Get-PfxCertificate -FilePath $PfxPath.FullName -Password $Password
 
 
@@ -169,7 +163,7 @@ https://www.hackthebox.eu/profile/52286
 
         Write-Verbose -Message "[v] Extrating the Public Certificate from the PFX file $($PfxPath.Name) to $($CertDestination)"
         Export-Certificate -Cert $PFXCertificate -FilePath $CertDestination.Replace(".crt", ".cer") -Type CERT -Force | Out-Null
-        Start-Process -FilePath "C:\Windows\System32\certutil.exe" -ArgumentList @("-f", "-encode", $CertDestination.Replace(".crt", ".cer"), $CertDestination) -Wait -WorkingDirectory "C:\Windows\System32" -NoNewWindow
+        certutil -f -encode $CertDestination.Replace(".crt", ".cer") $CertDestination
         Remove-Item -Path $CertDestination.Replace(".crt", ".cer") -Force -Confirm:$False -Verbose:$False -ErrorAction SilentlyContinue -WarningAction SilentlyContinue
 
 
@@ -180,7 +174,7 @@ https://www.hackthebox.eu/profile/52286
         $Chain.ChainElements | ForEach-Object {
 
             Export-Certificate -FilePath $CADestination -Cert $_.Certificate -Type CERT -Force | Out-Null
-            Start-Process -FilePath "C:\Windows\System32\certutil.exe" -ArgumentList @("-f", "-encode", $CADestination.Replace(".crt", ".cer"), $CADestination) -Wait -WorkingDirectory "C:\Windows\System32" -NoNewWindow
+            certutil -f -encode $CADestination.Replace(".crt", ".cer") $CADestination
             $AllCACerts += Get-Content -Path $CADestination -Force
 
         }  # End ForEach-Object
@@ -212,6 +206,6 @@ https://www.hackthebox.eu/profile/52286
     }  # End If Else
 
     Write-Verbose -Message "[v] Restarting PRTG services: $PRTGServices"
-    Restart-Service -Name $PRTGServices -Force
+    Restart-Service -Name $PRTGService -Force
 
 }  # End Function Update-PRTGCertificate
