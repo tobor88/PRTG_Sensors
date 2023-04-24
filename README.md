@@ -38,7 +38,8 @@ By default the Warning and Critical triggers are set on the following.
 - CPU Loads: WARN: 85% and CRITICAL: 95% 
 - Error for sensor shows up if Total Memory shows as 0. This is to know whether or not a connect was successfully made to the remote machine.
 An image of the output can be seen below.
-![Image of PRTG Results in GUI](https://raw.githubusercontent.com/tobor88/PRTG_Sensors/master/PRTG_Result_Image.png)
+![Image of PRTG Results in GUI 2019](https://raw.githubusercontent.com/tobor88/PRTG_Sensors/master/PRTG_Result_Image.png)
+![Image of PRTG Results in GUI 2023](https://raw.githubusercontent.com/tobor88/PRTG_Sensors/master/PRTG_Result_Image_2.png)
 
 ### Configuration of Sensor
 
@@ -55,7 +56,8 @@ An image of the configuration can be listed below. It is crucial that the follow
 
 I am pretty sure I covered everything. If you have questions or suggestions feel free to reach out to me at info@osbornepro.com
 
-![Image of PRTG Sensor Settings](https://raw.githubusercontent.com/tobor88/PRTG_Sensors/master/PRTG_Sensor_Image.png)
+![Image of PRTG Sensor Settings 2019](https://raw.githubusercontent.com/tobor88/PRTG_Sensors/master/PRTG_Sensor_Image.png)
+![Image of PRTG Sensor Settings 2023](https://raw.githubusercontent.com/tobor88/PRTG_Sensors/master/PRTG_Sensor_Image_2.png)
 
 ### Troubleshooting
 
