@@ -203,10 +203,6 @@ BEGIN {
 
     }  # End If
 
-    $StringWriter = New-Object -TypeName System.IO.StringWriter
-    $XmlWriter = New-Object -TypeName System.Xml.XmlTextWriter -ArgumentList $StringWriter
-    $XmlWriter.Formatting = "indented"
-
 } PROCESS {
 
     Write-Verbose -Message "[v] Evaluating whether to create a CIM session"
@@ -434,9 +430,6 @@ BEGIN {
 
 } END {
 
-    [Xml]$Xml.WriteTo($XmlWriter)
-    $XmlWriter.Flush()
-    $StringWriter.Flush()
-    Return $StringWriter.ToString()
+    Return $Xml
 
 }  # End BPE
