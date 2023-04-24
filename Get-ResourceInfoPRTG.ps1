@@ -123,7 +123,7 @@ param (
         ValueFromPipeLineByPropertyName=$False
     )]  # End Parameter
     [ValidateRange(1,100)]
-    [Int]$LowDiskSpaceWarningThreshold = 80,
+    [Int]$LowDiskSpaceWarningThreshold = 20,
 
     [Parameter(
         Mandatory=$False,
@@ -131,7 +131,7 @@ param (
         ValueFromPipeLineByPropertyName=$False
     )]  # End Parameter
     [ValidateRange(1,100)]
-    [Int]$LowDiskSpaceCriticalThreshold = 90,
+    [Int]$LowDiskSpaceCriticalThreshold = 10,
 
     [Parameter(
         Mandatory=$False,
