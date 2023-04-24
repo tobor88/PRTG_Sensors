@@ -205,7 +205,7 @@ https://www.hackthebox.eu/profile/52286
     
     }  # End If Else
 
-    Write-Verbose -Message "[v] Restarting PRTG services: $PRTGServices"
+    Write-Verbose -Message "[v] Restarting PRTG services: $PRTGService"
     Restart-Service -Name $PRTGService -Force
 
 }  # End Function Update-PRTGCertificate
