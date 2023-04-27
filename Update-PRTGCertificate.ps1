@@ -136,7 +136,7 @@ https://www.hackthebox.eu/profile/52286
         [Parameter(
             Mandatory=$False
         )]  # End Parameter
-        [Switch][Bool]$OverwriteExistingCertificate
+        [Switch]$OverwriteExistingCertificate
     )  # End param
 
     $Modules = "PSPKI"
