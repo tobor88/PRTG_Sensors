@@ -76,6 +76,7 @@ Contact: info@osbornepro.com
 
 
 .LINK
+https://osbornepro.com/blogs/prtg-resource-sensor
 https://www.paessler.com/prtg
 https://www.paessler.com/manuals/prtg/custom_sensors
 https://osbornepro.com
